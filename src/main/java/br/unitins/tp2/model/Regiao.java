@@ -7,7 +7,7 @@ public enum Regiao {
     CENTRO_OESTE(1, "Centro-Oeste"), 
     NORTE(2, "Norte"), 
     NORDESTE(3, "Nordeste"), 
-    SUDESTE(4, "Suldeste"), 
+    SUDESTE(4, "Sudeste"), 
     SUL(5, "Sul");
 
     private final int ID;

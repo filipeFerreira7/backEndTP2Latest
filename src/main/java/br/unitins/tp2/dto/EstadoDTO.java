@@ -1,25 +1,18 @@
 package br.unitins.tp2.dto;
 
-public final class EstadoDTO {
-    private final String nome;
-    private final String sigla;
-    private final long idRegiao;
+import br.unitins.tp2.model.Estado;
 
-    public EstadoDTO(String nome, String sigla, long idRegiao) {
-        this.nome = nome;
-        this.sigla = sigla;
-        this.idRegiao = idRegiao;
-    }
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-    public long getIdRegiao() {
-        return idRegiao;
-    }
+public record EstadoDTO(
+        @NotBlank(message = "O nome do estado deve ser preenchido")
+        @Size(max = 60, message = "O nome deve possuir no máximo 60 caracteres")
+        String nome,
 
-    public String getNome() {
-        return nome;
-    }
+        @NotBlank(message = "O campo sigla é obrigatório")
+        @Size(min = 2, max = 2, message = "A sigla deve possuir dois caracteres")
+        String sigla
 
-    public String getSigla() {
-        return sigla;
-    }
+) {
 }

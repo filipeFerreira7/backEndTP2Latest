@@ -6,6 +6,7 @@ import br.unitins.tp2.dto.EstadoDTO;
 import br.unitins.tp2.model.Estado;
 import br.unitins.tp2.model.Regiao;
 import br.unitins.tp2.repository.EstadoRepository;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -20,8 +21,8 @@ public class EstadoServiceImpl implements EstadoService {
     @Transactional
     public Estado create(EstadoDTO estado) {
         Estado novoEstado = new Estado();
-        novoEstado.setNome(estado.getNome());
-        novoEstado.setSigla(estado.getSigla());
+        novoEstado.setNome(estado.nome());
+        novoEstado.setSigla(estado.sigla());
        
         // selecionar uma regiao
         novoEstado.setRegiao(Regiao.CENTRO_OESTE);
@@ -58,8 +59,34 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public List<Estado> findAll() {
-        return estadoRepository.findAll().list();
+    public List<Estado> findAll(Integer page, Integer pageSize) {
+        PanacheQuery<Estado> query = null;
+        if(page == null || pageSize == null)
+            query = estadoRepository.findAll();
+        else
+            query = estadoRepository.findAll().page(page, pageSize);
+
+        return query.list();
+    }
+
+
+    @Override
+    public List<Estado> findByNome(String nome, Integer page, Integer pageSize) {
+        return estadoRepository.findByNome(nome).page(page, pageSize).list();
+    }
+    @Override
+    public List<Estado> findByNome(String nome) {
+        return estadoRepository.findByNome(nome).list();
+    }
+
+    @Override
+    public long count() {
+        return estadoRepository.findAll().count();
+    }
+
+    @Override
+    public long count(String nome) {
+        return estadoRepository.findByNome(nome).count();
     }
     
 }
