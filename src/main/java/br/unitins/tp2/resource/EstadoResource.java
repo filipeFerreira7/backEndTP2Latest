@@ -17,6 +17,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("estados")
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,8 +34,8 @@ public class EstadoResource {
 
     @GET
     @Path("/nome/{nome}")
-    public List<Estado> buscarPorNome(String nome, @QueryParam("page") @DefaultValue("0") int page, @QueryParam("pageSize") @DefaultValue("100") int pageSize) { 
-        return service.findByNome(nome,page,pageSize);
+    public Response buscarPorNome(String nome, @QueryParam("page") @DefaultValue("0") int page, @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
+        return Response.ok(service.findByNome(nome, page, pageSize)).build();
     }
 
     @GET
@@ -78,5 +79,9 @@ public class EstadoResource {
     public long totalPorNome(String nome){
         return service.count(nome);
     }
-
+    @GET
+    @Path("/countFilter")
+    public long countFiltrados(@QueryParam("nome") String nome) {
+        return service.countFiltrados(nome);
+    }
 }
