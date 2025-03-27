@@ -3,8 +3,11 @@ package br.unitins.tp2.resource;
 import java.util.List;
 
 import br.unitins.tp2.dto.EstadoDTO;
+import br.unitins.tp2.dto.EstadoDTOResponse;
+import br.unitins.tp2.dto.PaginacaoResponseDTO;
 import br.unitins.tp2.model.Estado;
 import br.unitins.tp2.service.EstadoService;
+import br.unitins.tp2.service.EstadoServiceImpl;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
@@ -27,9 +30,15 @@ public class EstadoResource {
     @Inject
     EstadoService service;
 
+
     @GET
-    public List<Estado> buscarTodos(@QueryParam("page") @DefaultValue("0") int page, @QueryParam("pageSize") @DefaultValue("100") int pageSize) { 
-        return service.findAll(page, pageSize);
+    public Response buscarTodos(@QueryParam("page") @DefaultValue("0") int page, @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
+       Long count = service.count();
+
+        PaginacaoResponseDTO<EstadoDTOResponse> paginacao = PaginacaoResponseDTO.valueOf(count,page,pageSize,service.findAll(page,pageSize)
+                .stream().map(EstadoDTOResponse::valueOf).toList());
+
+        return Response.ok(paginacao).build();
     }
 
     @GET
